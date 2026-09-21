@@ -1,0 +1,2841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TribalScholar AI 2.0</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    color: #18202a;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.app {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 260px;
+    background: #111827;
+    color: #ffffff;
+    padding: 24px 16px;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    overflow: auto;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.logo span {
+    color: #60a5fa;
+}
+
+.tagline {
+    font-size: 12px;
+    color: #9ca3af;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+.nav button {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: #d1d5db;
+    padding: 12px;
+    text-align: left;
+    border-radius: 9px;
+    margin-bottom: 5px;
+}
+
+.nav button:hover,
+.nav button.active {
+    background: #1f2937;
+    color: #ffffff;
+}
+
+.main {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+}
+
+/* HEADER */
+.header {
+    height: 72px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.header-title {
+    font-size: 20px;
+    font-weight: 750;
+}
+
+.profile-mini {
+    background: #eef2ff;
+    padding: 9px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+}
+
+/* CONTENT */
+.content {
+    padding: 30px;
+}
+
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+
+.hero {
+    background: linear-gradient(135deg, #172033, #243b67);
+    color: #ffffff;
+    border-radius: 18px;
+    padding: 32px;
+    margin-bottom: 24px;
+}
+
+.hero h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    color: #dbe4f4;
+    max-width: 800px;
+    line-height: 1.6;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+}
+
+.primary {
+    background: #ffffff;
+    color: #172033;
+    border: 0;
+    padding: 13px 18px;
+    border-radius: 9px;
+    font-weight: 700;
+}
+
+.secondary {
+    background: #33486f;
+    color: #ffffff;
+    border: 1px solid #526789;
+    padding: 13px 18px;
+    border-radius: 9px;
+}
+
+/* CARDS */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.035);
+}
+
+.card h3 {
+    margin-bottom: 8px;
+}
+
+.metric {
+    font-size: 29px;
+    font-weight: 800;
+    margin: 8px 0;
+}
+
+.muted {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.good {
+    color: #15803d;
+}
+
+.warning {
+    color: #b45309;
+}
+
+.danger {
+    color: #b91c1c;
+}
+
+/* PRIORITY */
+.priority {
+    border-left: 4px solid #2563eb;
+    padding: 14px 16px;
+    background: #f8fafc;
+    margin-top: 10px;
+    border-radius: 6px;
+}
+
+.priority strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th,
+td {
+    text-align: left;
+    padding: 13px;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 13px;
+}
+
+th {
+    background: #f9fafb;
+}
+
+/* BADGES */
+.badge {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 15px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-right: 5px;
+}
+
+.badge-green {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge-yellow {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.badge-red {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.badge-blue {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+/* FORMS */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 650;
+    margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 11px;
+    outline: none;
+}
+
+.action-btn {
+    border: 0;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #ffffff;
+    font-weight: 650;
+}
+
+.action-btn:hover {
+    background: #1d4ed8;
+}
+
+.outline-btn {
+    border: 1px solid #cbd5e1;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+/* DOCUMENT */
+.doc {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #e5e7eb;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.doc-name {
+    font-weight: 650;
+}
+
+.upload {
+    margin-top: 12px;
+}
+
+/* SCORE */
+.score {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 14px solid #dbeafe;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: 800;
+    margin: 20px auto;
+}
+
+.progress {
+    height: 9px;
+    background: #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 8px 0 15px;
+}
+
+.progress div {
+    height: 100%;
+    background: #2563eb;
+}
+
+/* TIMELINE */
+.timeline {
+    border-left: 3px solid #2563eb;
+    margin: 20px;
+    padding-left: 25px;
+}
+
+.timeline-item {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.timeline-item::before {
+    content: "";
+    width: 11px;
+    height: 11px;
+    background: #2563eb;
+    border-radius: 50%;
+    position: absolute;
+    left: -32px;
+    top: 3px;
+}
+
+/* VOICE */
+.voice-box {
+    text-align: center;
+    padding: 30px;
+    background: #f8fafc;
+    border-radius: 15px;
+}
+
+.mic {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 0;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 30px;
+    margin: 15px;
+}
+
+#voiceStatus {
+    min-height: 30px;
+    color: #475569;
+}
+
+/* CHAT */
+.chat {
+    height: 350px;
+    overflow: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 15px;
+    background: #f8fafc;
+    text-align: left;
+}
+
+.msg {
+    padding: 11px 14px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    max-width: 85%;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+.ai {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+}
+
+.user {
+    background: #dbeafe;
+    margin-left: auto;
+}
+
+/* MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-box {
+    background: #ffffff;
+    width: min(720px, 100%);
+    max-height: 90vh;
+    overflow: auto;
+    border-radius: 15px;
+    padding: 25px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.close {
+    border: 0;
+    background: transparent;
+    font-size: 22px;
+}
+
+/* ALERT */
+.alert {
+    padding: 15px;
+    border-radius: 10px;
+    margin: 10px 0;
+}
+
+.alert-danger {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.alert-warning {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.alert-good {
+    background: #dcfce7;
+    color: #166534;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1000px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 750px) {
+    .sidebar {
+        width: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .main {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .content {
+        padding: 15px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+        font-size: 24px;
+    }
+
+    .header {
+        padding: 0 15px;
+    }
+
+    .doc {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+
+    <div class="logo">
+        TribalScholar <span>AI</span>
+    </div>
+
+    <div class="tagline">
+        Education financial-support navigator for digitally inexperienced students.
+    </div>
+
+    <div class="nav">
+
+        <button class="active" onclick="showSection('home', this)">
+            Dashboard
+        </button>
+
+        <button onclick="showSection('benefits', this)">
+            Find Benefits
+        </button>
+
+        <button onclick="showSection('passport', this)">
+            Scholarship Passport
+        </button>
+
+        <button onclick="showSection('documents', this)">
+            Document Doctor
+        </button>
+
+        <button onclick="showSection('simulator', this)">
+            Application Simulator
+        </button>
+
+        <button onclick="showSection('applications', this)">
+            Application Monitor
+        </button>
+
+        <button onclick="showSection('recovery', this)">
+            Failure Recovery
+        </button>
+
+        <button onclick="showSection('scam', this)">
+            Scam Shield
+        </button>
+
+        <button onclick="showSection('financial', this)">
+            Financial Stress
+        </button>
+
+        <button onclick="showSection('timeline', this)">
+            Benefit Timeline
+        </button>
+
+        <button onclick="showSection('voice', this)">
+            Voice Assistant
+        </button>
+
+        <button onclick="showSection('family', this)">
+            Family Mode
+        </button>
+
+    </div>
+</aside>
+
+<main class="main">
+
+<header class="header">
+
+    <div class="header-title">
+        TribalScholar AI
+    </div>
+
+    <div class="profile-mini" id="miniProfile">
+        Profile not created
+    </div>
+
+</header>
+
+<div class="content">
+
+<!-- HOME -->
+<section id="home" class="section active">
+
+    <div class="hero">
+
+        <h1>Scholarship help without the complexity.</h1>
+
+        <p>
+            Tell us about yourself. TribalScholar AI finds potential educational
+            financial support, explains eligibility, identifies document problems,
+            predicts application risks and guides you toward the next action.
+        </p>
+
+        <div class="hero-actions">
+
+            <button class="primary"
+                    onclick="showSection('voice')">
+                🎙 Start with Voice
+            </button>
+
+            <button class="secondary"
+                    onclick="showSection('benefits')">
+                Find My Benefits
+            </button>
+
+            <button class="secondary"
+                    onclick="showSection('documents')">
+                Check My Documents
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="grid">
+
+        <div class="card">
+            <div class="muted">Potential Benefits</div>
+            <div class="metric" id="benefitCount">0</div>
+            <div class="good">Opportunities identified</div>
+        </div>
+
+        <div class="card">
+            <div class="muted">Application Health</div>
+            <div class="metric" id="healthMetric">--</div>
+            <div class="muted">Readiness score</div>
+        </div>
+
+        <div class="card">
+            <div class="muted">Financial Stress</div>
+            <div class="metric" id="stressMetric">--</div>
+            <div class="muted">Support priority</div>
+        </div>
+
+        <div class="card">
+            <div class="muted">Urgent Actions</div>
+            <div class="metric" id="urgentMetric">2</div>
+            <div class="danger">Require attention</div>
+        </div>
+
+    </div>
+
+    <div class="grid-2">
+
+        <div class="card">
+
+            <h3>AI Priority Queue</h3>
+
+            <div class="priority">
+                <strong>1. Complete income certificate</strong>
+                <span class="muted">
+                    Potentially blocks multiple opportunities.
+                </span>
+            </div>
+
+            <div class="priority">
+                <strong>2. Review upcoming deadline</strong>
+                <span class="muted">
+                    One potential opportunity has high urgency.
+                </span>
+            </div>
+
+            <div class="priority">
+                <strong>3. Check application discrepancy</strong>
+                <span class="muted">
+                    Application monitor detected a possible issue.
+                </span>
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <h3>Student Protection Loop</h3>
+
+            <p class="muted" style="line-height:1.7">
+                Discover → Understand → Prepare → Simulate → Submit →
+                Monitor → Diagnose → Recover → Receive.
+            </p>
+
+            <div class="alert alert-good">
+                The goal is not merely application submission.
+                <br><br>
+                <strong>The goal is successful benefit delivery.</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- BENEFITS -->
+<section id="benefits" class="section">
+
+    <div class="card">
+
+        <h2>Benefit Leakage Detector</h2>
+
+        <p class="muted" style="margin-top:8px">
+            We search the demo benefit database against your profile and
+            prioritize opportunities by eligibility, benefit, urgency and
+            application feasibility.
+        </p>
+
+        <br>
+
+        <button class="action-btn" onclick="findBenefits()">
+            Find Everything I May Qualify For
+        </button>
+
+        <div id="benefitResults"></div>
+
+    </div>
+
+</section>
+
+
+<!-- PASSPORT -->
+<section id="passport" class="section">
+
+    <div class="card">
+
+        <h2>Scholarship Passport</h2>
+
+        <p class="muted">
+            A persistent education-support profile that can be reused each year.
+        </p>
+
+        <br>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>Name</label>
+                <input id="name" placeholder="Student name">
+            </div>
+
+            <div class="form-group">
+                <label>State</label>
+                <select id="state">
+                    <option>Chhattisgarh</option>
+                    <option>Madhya Pradesh</option>
+                    <option>Odisha</option>
+                    <option>Jharkhand</option>
+                    <option>Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Category</label>
+                <select id="category">
+                    <option>Scheduled Tribe (ST)</option>
+                    <option>Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Course</label>
+                <input id="course" placeholder="B.Tech">
+            </div>
+
+            <div class="form-group">
+                <label>Year</label>
+                <select id="year">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Marks %</label>
+                <input id="marks" type="number" placeholder="68">
+            </div>
+
+            <div class="form-group">
+                <label>Annual Family Income ₹</label>
+                <input id="income" type="number" placeholder="150000">
+            </div>
+
+            <div class="form-group">
+                <label>Annual Education Fees ₹</label>
+                <input id="fees" type="number" placeholder="70000">
+            </div>
+
+        </div>
+
+        <button class="action-btn" onclick="saveProfile()">
+            Save Scholarship Passport
+        </button>
+
+        <div id="profileMessage"></div>
+
+    </div>
+
+</section>
+
+
+<!-- DOCUMENTS -->
+<section id="documents" class="section">
+
+    <div class="card">
+
+        <h2>Document Doctor</h2>
+
+        <p class="muted">
+            Take/upload a document. The prototype checks file type, size and
+            basic document identification. It does not authenticate government
+            documents.
+        </p>
+
+        <br>
+
+        <div id="documentsList"></div>
+
+    </div>
+
+</section>
+
+
+<!-- SIMULATOR -->
+<section id="simulator" class="section">
+
+    <div class="card">
+
+        <h2>Application Simulator</h2>
+
+        <p class="muted">
+            Before submitting, let the system perform a pre-submission risk review.
+        </p>
+
+        <br>
+
+        <div class="form-group">
+            <label>Name exactly as shown on certificate</label>
+            <input id="simName" placeholder="Example: Ravi Kumar">
+        </div>
+
+        <div class="form-group">
+            <label>Name entered in application</label>
+            <input id="simAppName" placeholder="Example: Ravi Kumar">
+        </div>
+
+        <div class="form-group">
+            <label>Income certificate available?</label>
+            <select id="simIncome">
+                <option>Yes</option>
+                <option>No</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>ST certificate available?</label>
+            <select id="simST">
+                <option>Yes</option>
+                <option>No</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Bank details verified?</label>
+            <select id="simBank">
+                <option>Yes</option>
+                <option>No</option>
+            </select>
+        </div>
+
+        <button class="action-btn" onclick="simulateApplication()">
+            Run Application Simulation
+        </button>
+
+        <div id="simulationResult"></div>
+
+    </div>
+
+</section>
+
+
+<!-- APPLICATIONS -->
+<section id="applications" class="section">
+
+    <div class="card">
+
+        <h2>Application Monitor</h2>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Opportunity</th>
+                    <th>Status</th>
+                    <th>Stage</th>
+                    <th>Risk</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>Demo Tribal Education Support</td>
+
+                    <td>
+                        <span class="badge badge-blue">
+                            Submitted
+                        </span>
+                    </td>
+
+                    <td>Institute Verification</td>
+
+                    <td>
+                        <span class="badge badge-yellow">
+                            Medium
+                        </span>
+                    </td>
+
+                    <td>
+                        <button class="outline-btn"
+                                onclick="diagnose('Institute verification pending')">
+                            Diagnose
+                        </button>
+                    </td>
+                </tr>
+
+                <tr>
+
+                    <td>Demo STEM Fellowship</td>
+
+                    <td>
+                        <span class="badge badge-red">
+                            Deficiency
+                        </span>
+                    </td>
+
+                    <td>Document Review</td>
+
+                    <td>
+                        <span class="badge badge-red">
+                            High
+                        </span>
+                    </td>
+
+                    <td>
+                        <button class="outline-btn"
+                                onclick="diagnose('Possible document mismatch')">
+                            Diagnose
+                        </button>
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- RECOVERY -->
+<section id="recovery" class="section">
+
+    <div class="card">
+
+        <h2>Failure Recovery Engine</h2>
+
+        <p class="muted">
+            Paste an application rejection/deficiency message and the system
+            will classify the problem and generate a recovery plan.
+        </p>
+
+        <br>
+
+        <textarea id="rejectionText"
+                  rows="7"
+                  placeholder="Paste rejection message here..."></textarea>
+
+        <br><br>
+
+        <button class="action-btn" onclick="analyzeRejection()">
+            Analyze Failure
+        </button>
+
+        <div id="recoveryResult"></div>
+
+    </div>
+
+</section>
+
+
+<!-- SCAM -->
+<section id="scam" class="section">
+
+    <div class="card">
+
+        <h2>Scholarship Scam Shield</h2>
+
+        <p class="muted">
+            Paste suspicious scholarship text, a domain name, or a message.
+            The prototype searches for common warning signals.
+        </p>
+
+        <br>
+
+        <textarea id="scamText"
+                  rows="7"
+                  placeholder="Example: Pay ₹999 to unlock government scholarship..."></textarea>
+
+        <br><br>
+
+        <button class="action-btn" onclick="checkScam()">
+            Check Risk
+        </button>
+
+        <div id="scamResult"></div>
+
+    </div>
+
+</section>
+
+
+<!-- FINANCIAL -->
+<section id="financial" class="section">
+
+    <div class="card">
+
+        <h2>Education Financial Stress Engine</h2>
+
+        <p class="muted">
+            This is an educational-support prioritization tool, not a credit,
+            medical or legal decision system.
+        </p>
+
+        <br>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>Annual family income ₹</label>
+                <input id="fsIncome" type="number">
+            </div>
+
+            <div class="form-group">
+                <label>Annual education cost ₹</label>
+                <input id="fsFees" type="number">
+            </div>
+
+            <div class="form-group">
+                <label>Outstanding fee ₹</label>
+                <input id="fsOutstanding" type="number">
+            </div>
+
+            <div class="form-group">
+                <label>Current scholarship/support ₹</label>
+                <input id="fsSupport" type="number">
+            </div>
+
+        </div>
+
+        <button class="action-btn" onclick="calculateStress()">
+            Assess Financial Stress
+        </button>
+
+        <div id="stressResult"></div>
+
+    </div>
+
+</section>
+
+
+<!-- TIMELINE -->
+<section id="timeline" class="section">
+
+    <div class="card">
+
+        <h2>Your 12-Month Benefit Timeline</h2>
+
+        <p class="muted">
+            Personalized support calendar.
+        </p>
+
+        <div class="timeline">
+
+            <div class="timeline-item">
+                <strong>September</strong>
+                <p class="muted">
+                    Check current scholarship eligibility and missing documents.
+                </p>
+            </div>
+
+            <div class="timeline-item">
+                <strong>October</strong>
+                <p class="muted">
+                    Review application verification status.
+                </p>
+            </div>
+
+            <div class="timeline-item">
+                <strong>November</strong>
+                <p class="muted">
+                    Search fellowships and institutional support.
+                </p>
+            </div>
+
+            <div class="timeline-item">
+                <strong>January</strong>
+                <p class="muted">
+                    Prepare renewal documents.
+                </p>
+            </div>
+
+            <div class="timeline-item">
+                <strong>March</strong>
+                <p class="muted">
+                    Review academic results and next-year opportunities.
+                </p>
+            </div>
+
+            <div class="timeline-item">
+                <strong>June</strong>
+                <p class="muted">
+                    Rebuild benefit profile for the new academic cycle.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- VOICE -->
+<section id="voice" class="section">
+
+    <div class="card">
+
+        <h2>Zero-Knowledge Voice Mode</h2>
+
+        <p class="muted">
+            The student can speak naturally instead of navigating complicated forms.
+        </p>
+
+        <br>
+
+        <div class="voice-box">
+
+            <button class="mic" onclick="startVoice()">
+                🎙
+            </button>
+
+            <div id="voiceStatus">
+                Press the microphone and speak.
+            </div>
+
+            <br>
+
+            <div class="chat" id="chat">
+
+                <div class="msg ai">
+                    Namaste. Main aapki scholarship aur education financial support
+                    mein help kar sakta hoon. Aap bas normal language mein baat karein.
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FAMILY -->
+<section id="family" class="section">
+
+    <div class="card">
+
+        <h2>Family / Guardian Mode</h2>
+
+        <p class="muted">
+            Simple status view for a parent, guardian or sibling.
+        </p>
+
+        <br>
+
+        <div class="alert alert-warning">
+
+            <strong>Ravi's Scholarship</strong>
+
+            <br><br>
+
+            Application: Submitted
+            <br>
+            Documents: 4/5 ready
+            <br>
+            Current issue: Income certificate
+            <br>
+            Deadline risk: Medium
+
+        </div>
+
+        <button class="action-btn"
+                onclick="speakText('Ravi ke application mein income certificate ki zarurat hai. Deadline ko miss na karein. Kripya income certificate jaldi taiyar karein.')">
+
+            🔊 Read Status Aloud
+
+        </button>
+
+    </div>
+
+</section>
+
+</div>
+</main>
+</div>
+
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2 id="modalTitle">
+                AI Diagnosis
+            </h2>
+
+            <button class="close" onclick="closeModal()">
+                ×
+            </button>
+
+        </div>
+
+        <div id="modalContent"></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   TRIBALSCHOLAR AI 2.0
+   FRONT-END PROTOTYPE
+   ========================================================= */
+
+
+/* DEMO DATABASE
+   NOT OFFICIAL GOVERNMENT DATA.
+*/
+
+const schemes = [
+
+    {
+        name: "Demo Tribal Merit Scholarship",
+        benefit: 50000,
+        deadline: 2,
+        incomeLimit: 250000,
+        marks: 60,
+        courses: ["B.Tech", "B.Sc", "BA"],
+        states: ["Chhattisgarh", "Madhya Pradesh"],
+        docs: [
+            "ST Certificate",
+            "Income Certificate",
+            "Bonafide",
+            "Marksheet"
+        ]
+    },
+
+    {
+        name: "Demo ST Higher Education Support",
+        benefit: 40000,
+        deadline: 12,
+        incomeLimit: 300000,
+        marks: 50,
+        courses: ["B.Tech", "B.Sc", "BA", "B.Com"],
+        states: [
+            "Chhattisgarh",
+            "Madhya Pradesh",
+            "Odisha",
+            "Jharkhand"
+        ],
+        docs: [
+            "ST Certificate",
+            "Income Certificate",
+            "Bonafide",
+            "Bank Document"
+        ]
+    },
+
+    {
+        name: "Demo ST STEM Excellence Fellowship",
+        benefit: 100000,
+        deadline: 25,
+        incomeLimit: 500000,
+        marks: 70,
+        courses: ["B.Tech", "M.Tech"],
+        states: [
+            "Chhattisgarh",
+            "Madhya Pradesh",
+            "Odisha",
+            "Jharkhand"
+        ],
+        docs: [
+            "ST Certificate",
+            "Marksheet",
+            "Bonafide"
+        ]
+    },
+
+    {
+        name: "Demo Tribal Education Support",
+        benefit: 30000,
+        deadline: 7,
+        incomeLimit: 350000,
+        marks: 55,
+        courses: ["B.Tech", "B.Sc", "BA"],
+        states: ["Chhattisgarh", "Madhya Pradesh"],
+        docs: [
+            "ST Certificate",
+            "Income Certificate",
+            "Bonafide"
+        ]
+    }
+
+];
+
+
+/* PROFILE */
+
+let profile =
+    JSON.parse(localStorage.getItem("tribalScholarProfile")) || null;
+
+
+function saveProfile() {
+
+    profile = {
+
+        name: document.getElementById("name").value,
+
+        state: document.getElementById("state").value,
+
+        category: document.getElementById("category").value,
+
+        course: document.getElementById("course").value,
+
+        year: Number(document.getElementById("year").value),
+
+        marks: Number(document.getElementById("marks").value),
+
+        income: Number(document.getElementById("income").value),
+
+        fees: Number(document.getElementById("fees").value)
+
+    };
+
+
+    localStorage.setItem(
+        "tribalScholarProfile",
+        JSON.stringify(profile)
+    );
+
+
+    updateProfileUI();
+
+
+    document.getElementById("profileMessage").innerHTML = `
+
+        <div class="alert alert-good">
+
+            Scholarship Passport saved successfully.
+
+        </div>
+
+    `;
+
+}
+
+
+function loadProfile() {
+
+    if (!profile) return;
+
+
+    document.getElementById("name").value =
+        profile.name || "";
+
+    document.getElementById("state").value =
+        profile.state || "Chhattisgarh";
+
+    document.getElementById("category").value =
+        profile.category || "Scheduled Tribe (ST)";
+
+    document.getElementById("course").value =
+        profile.course || "";
+
+    document.getElementById("year").value =
+        profile.year || 1;
+
+    document.getElementById("marks").value =
+        profile.marks || "";
+
+    document.getElementById("income").value =
+        profile.income || "";
+
+    document.getElementById("fees").value =
+        profile.fees || "";
+
+}
+
+
+function updateProfileUI() {
+
+    if (!profile) {
+
+        document.getElementById("miniProfile")
+            .textContent = "Profile not created";
+
+        return;
+    }
+
+
+    document.getElementById("miniProfile")
+        .textContent = profile.name || "Student";
+
+}
+
+
+loadProfile();
+updateProfileUI();
+
+
+/* NAVIGATION */
+
+function showSection(id, button) {
+
+    document
+        .querySelectorAll(".section")
+        .forEach(section => {
+            section.classList.remove("active");
+        });
+
+
+    const target = document.getElementById(id);
+
+    if (target) {
+        target.classList.add("active");
+    }
+
+
+    if (button) {
+
+        document
+            .querySelectorAll(".nav button")
+            .forEach(btn => btn.classList.remove("active"));
+
+        button.classList.add("active");
+
+    }
+
+
+    if (id === "documents") {
+        renderDocuments();
+    }
+
+}
+
+
+/* BENEFIT FINDER */
+
+function findBenefits() {
+
+    if (!profile) {
+
+        alert("Please create your Scholarship Passport first.");
+
+        showSection("passport");
+
+        return;
+    }
+
+
+    const results = [];
+
+
+    schemes.forEach(scheme => {
+
+        let score = 0;
+
+        let reasons = [];
+
+        let issues = [];
+
+
+        if (profile.category.includes("Scheduled Tribe")) {
+
+            score += 20;
+
+            reasons.push("ST category matches.");
+
+        } else {
+
+            issues.push("Category may not match.");
+
+        }
+
+
+        if (scheme.states.includes(profile.state)) {
+
+            score += 20;
+
+            reasons.push("State matches.");
+
+        } else {
+
+            issues.push("State is outside demo scheme scope.");
+
+        }
+
+
+        if (
+            profile.course &&
+            scheme.courses.some(
+                c =>
+                    profile.course
+                        .toLowerCase()
+                        .includes(c.toLowerCase())
+            )
+        ) {
+
+            score += 20;
+
+            reasons.push("Course matches.");
+
+        } else {
+
+            issues.push("Course may not match.");
+
+        }
+
+
+        if (profile.marks >= scheme.marks) {
+
+            score += 20;
+
+            reasons.push(
+                `Marks meet the demo threshold of ${scheme.marks}%.`
+            );
+
+        } else {
+
+            issues.push(
+                `Marks below demo threshold of ${scheme.marks}%.`
+            );
+
+        }
+
+
+        if (profile.income <= scheme.incomeLimit) {
+
+            score += 20;
+
+            reasons.push("Income is within demo limit.");
+
+        } else {
+
+            issues.push("Income exceeds demo limit.");
+
+        }
+
+
+        if (score >= 60) {
+
+            results.push({
+                scheme,
+                score,
+                reasons,
+                issues
+            });
+
+        }
+
+    });
+
+
+    results.sort(
+        (a, b) =>
+            (b.score + (30 - a.scheme.deadline)) -
+            (a.score + (30 - b.scheme.deadline))
+    );
+
+
+    document.getElementById("benefitCount")
+        .textContent = results.length;
+
+
+    let html = "";
+
+
+    if (results.length === 0) {
+
+        html = `
+
+            <div class="alert alert-warning">
+
+                No strong demo matches were identified.
+
+                This does NOT mean the student has no real-world benefits.
+                The production system needs a complete verified scheme database.
+
+            </div>
+
+        `;
+
+    }
+
+
+    results.forEach((r, index) => {
+
+        const urgency =
+            r.scheme.deadline <= 3
+                ? "HIGH"
+                : r.scheme.deadline <= 7
+                    ? "MEDIUM"
+                    : "LOW";
+
+
+        html += `
+
+            <div class="card" style="margin-top:15px">
+
+                <h3>${index + 1}. ${r.scheme.name}</h3>
+
+                <br>
+
+                <span class="badge badge-green">
+                    Match ${r.score}%
+                </span>
+
+                <span class="badge badge-blue">
+                    Potential benefit ₹${r.scheme.benefit.toLocaleString()}
+                </span>
+
+                <span class="badge ${
+                    urgency === "HIGH"
+                        ? "badge-red"
+                        : "badge-yellow"
+                }">
+                    ${urgency} urgency
+                </span>
+
+                <br><br>
+
+                <strong>
+                    Deadline: ${r.scheme.deadline} days
+                </strong>
+
+                <br><br>
+
+                <div class="muted">
+                    ${r.reasons.map(x => "✓ " + x).join("<br>")}
+                </div>
+
+                ${
+                    r.issues.length
+                        ? `
+                            <br>
+                            <div class="warning">
+                                ${r.issues.map(x => "⚠ " + x).join("<br>")}
+                            </div>
+                          `
+                        : ""
+                }
+
+                <br>
+
+                <button class="outline-btn"
+                        onclick='showEligibility(${JSON.stringify(r)})'>
+
+                    Why do I qualify?
+
+                </button>
+
+            </div>
+
+        `;
+
+    });
+
+
+    document.getElementById("benefitResults")
+        .innerHTML = html;
+
+}
+
+
+function showEligibility(data) {
+
+    openModal(
+
+        "Explainable Eligibility",
+
+        `
+
+            <h3>${data.scheme.name}</h3>
+
+            <br>
+
+            <p>
+                <strong>Match score:</strong>
+                ${data.score}%
+            </p>
+
+            <br>
+
+            <h4>Why?</h4>
+
+            <br>
+
+            ${data.reasons
+                .map(
+                    x =>
+                        `<div class="alert alert-good">${x}</div>`
+                )
+                .join("")}
+
+            ${
+                data.issues.length
+                    ? `
+                        <h4>Things to fix</h4>
+
+                        <br>
+
+                        ${data.issues
+                            .map(
+                                x =>
+                                    `<div class="alert alert-warning">${x}</div>`
+                            )
+                            .join("")}
+                      `
+                    : ""
+            }
+
+            <br>
+
+            <div class="alert alert-warning">
+
+                This prototype uses demonstration rules.
+                Production decisions must be based on current verified
+                official scheme notifications.
+
+            </div>
+
+        `
+
+    );
+
+}
+
+
+/* DOCUMENT DOCTOR */
+
+const documentNames = [
+    "ST Certificate",
+    "Income Certificate",
+    "Bonafide",
+    "Previous Marksheet",
+    "Bank Document"
+];
+
+
+let docs =
+    JSON.parse(localStorage.getItem("tribalScholarDocs")) || {};
+
+
+function renderDocuments() {
+
+    const container =
+        document.getElementById("documentsList");
+
+    container.innerHTML = "";
+
+
+    documentNames.forEach(name => {
+
+        const ready = docs[name] === true;
+
+        const div = document.createElement("div");
+
+        div.className = "doc";
+
+
+        div.innerHTML = `
+
+            <div>
+
+                <div class="doc-name">
+                    ${name}
+                </div>
+
+                <span class="badge ${
+                    ready
+                        ? "badge-green"
+                        : "badge-yellow"
+                }">
+
+                    ${ready ? "READY" : "MISSING"}
+
+                </span>
+
+            </div>
+
+            <div>
+
+                <input
+                    class="upload"
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    onchange="scanDocument('${name}', this)"
+                >
+
+            </div>
+
+        `;
+
+
+        container.appendChild(div);
+
+    });
+
+}
+
+
+function scanDocument(name, input) {
+
+    const file = input.files[0];
+
+    if (!file) return;
+
+
+    const allowed = [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+    ];
+
+
+    if (!allowed.includes(file.type)) {
+
+        alert("Unsupported file type.");
+
+        return;
+
+    }
+
+
+    if (file.size > 10 * 1024 * 1024) {
+
+        alert("File is larger than 10 MB.");
+
+        return;
+
+    }
+
+
+    docs[name] = true;
+
+
+    localStorage.setItem(
+        "tribalScholarDocs",
+        JSON.stringify(docs)
+    );
+
+
+    renderDocuments();
+
+    updateHealth();
+
+}
+
+
+renderDocuments();
+
+
+/* APPLICATION HEALTH */
+
+function updateHealth() {
+
+    if (!profile) return;
+
+
+    const total = documentNames.length;
+
+    const ready =
+        Object.values(docs).filter(Boolean).length;
+
+
+    let score = 0;
+
+
+    score += profile.name ? 20 : 0;
+
+    score += profile.course ? 20 : 0;
+
+    score += profile.marks ? 10 : 0;
+
+    score += profile.income ? 10 : 0;
+
+    score += (ready / total) * 40;
+
+
+    score = Math.round(score);
+
+
+    document.getElementById("healthMetric")
+        .textContent = score + "%";
+
+}
+
+
+setInterval(updateHealth, 1000);
+
+
+/* APPLICATION SIMULATOR */
+
+function simulateApplication() {
+
+    const certificateName =
+        document.getElementById("simName")
+            .value.trim();
+
+    const applicationName =
+        document.getElementById("simAppName")
+            .value.trim();
+
+    const income =
+        document.getElementById("simIncome").value;
+
+    const st =
+        document.getElementById("simST").value;
+
+    const bank =
+        document.getElementById("simBank").value;
+
+
+    let risks = [];
+
+    let score = 100;
+
+
+    if (
+        certificateName &&
+        applicationName &&
+        certificateName.toLowerCase() !==
+        applicationName.toLowerCase()
+    ) {
+
+        risks.push(
+            "Possible name mismatch between certificate and application."
+        );
+
+        score -= 30;
+
+    }
+
+
+    if (income === "No") {
+
+        risks.push(
+            "Income certificate is missing."
+        );
+
+        score -= 25;
+
+    }
+
+
+    if (st === "No") {
+
+        risks.push(
+            "ST certificate is missing."
+        );
+
+        score -= 25;
+
+    }
+
+
+    if (bank === "No") {
+
+        risks.push(
+            "Bank information has not been verified."
+        );
+
+        score -= 15;
+
+    }
+
+
+    score = Math.max(0, score);
+
+
+    const level =
+        score >= 80
+            ? "LOW"
+            : score >= 60
+                ? "MEDIUM"
+                : "HIGH";
+
+
+    document.getElementById("simulationResult")
+        .innerHTML = `
+
+            <div class="card" style="margin-top:20px">
+
+                <h3>
+                    Application Health: ${score}/100
+                </h3>
+
+                <br>
+
+                <span class="badge ${
+                    level === "LOW"
+                        ? "badge-green"
+                        : level === "MEDIUM"
+                            ? "badge-yellow"
+                            : "badge-red"
+                }">
+
+                    ${level} RISK
+
+                </span>
+
+                <br><br>
+
+                ${
+                    risks.length
+                        ? risks.map(
+                            r =>
+                                `<div class="alert alert-warning">
+                                    ⚠ ${r}
+                                </div>`
+                        ).join("")
+                        : `
+                            <div class="alert alert-good">
+                                No major prototype-level issues detected.
+                            </div>
+                          `
+                }
+
+                <div class="alert alert-warning">
+
+                    This is a pre-submission screening tool, not a guarantee
+                    that an official authority will approve the application.
+
+                </div>
+
+            </div>
+
+        `;
+
+}
+
+
+/* APPLICATION DIAGNOSIS */
+
+function diagnose(problem) {
+
+    openModal(
+
+        "Application Diagnosis",
+
+        `
+
+            <h3>Detected bottleneck</h3>
+
+            <br>
+
+            <div class="alert alert-warning">
+                ${problem}
+            </div>
+
+            <h3>Recommended recovery path</h3>
+
+            <br>
+
+            <ol style="line-height:2;padding-left:20px">
+
+                <li>
+                    Read the official application status carefully.
+                </li>
+
+                <li>
+                    Identify the authority currently holding the application.
+                </li>
+
+                <li>
+                    Check whether a deficiency/document request exists.
+                </li>
+
+                <li>
+                    Correct the issue using the official process.
+                </li>
+
+                <li>
+                    Keep proof of submission.
+                </li>
+
+                <li>
+                    Recheck status after the stated processing period.
+                </li>
+
+            </ol>
+
+            <br>
+
+            <button class="action-btn"
+                    onclick="closeModal(); showSection('recovery')">
+
+                Open Recovery Engine
+
+            </button>
+
+        `
+
+    );
+
+}
+
+
+/* REJECTION ANALYZER */
+
+function analyzeRejection() {
+
+    const text =
+        document
+            .getElementById("rejectionText")
+            .value
+            .toLowerCase();
+
+
+    if (!text) {
+
+        alert("Paste the rejection/deficiency message first.");
+
+        return;
+
+    }
+
+
+    let category = "General administrative issue";
+
+    let confidence = 55;
+
+    let actions = [];
+
+
+    if (
+        text.includes("income") ||
+        text.includes("family income")
+    ) {
+
+        category = "Income / income-certificate issue";
+
+        confidence = 88;
+
+        actions = [
+            "Check the income certificate date.",
+            "Check that the certificate belongs to the correct applicant/family.",
+            "Check spelling and identification details.",
+            "Follow the official correction/resubmission process."
+        ];
+
+    }
+
+    else if (
+        text.includes("caste") ||
+        text.includes("tribe") ||
+        text.includes("st certificate")
+    ) {
+
+        category = "Category/ST certificate issue";
+
+        confidence = 90;
+
+        actions = [
+            "Check certificate details.",
+            "Check whether the certificate format is accepted.",
+            "Verify required issuing authority.",
+            "Use the official correction mechanism."
+        ];
+
+    }
+
+    else if (
+        text.includes("bank") ||
+        text.includes("account") ||
+        text.includes("payment")
+    ) {
+
+        category = "Bank/payment issue";
+
+        confidence = 85;
+
+        actions = [
+            "Check account number.",
+            "Check bank details.",
+            "Check whether the required identity/bank linkage is complete.",
+            "Contact the official support channel if payment remains blocked."
+        ];
+
+    }
+
+    else if (
+        text.includes("mark") ||
+        text.includes("academic") ||
+        text.includes("percentage")
+    ) {
+
+        category = "Academic information issue";
+
+        confidence = 80;
+
+        actions = [
+            "Compare marks entered with the official marksheet.",
+            "Check passing year and course information.",
+            "Correct discrepancies through the official process."
+        ];
+
+    }
+
+    else if (
+        text.includes("document") ||
+        text.includes("upload")
+    ) {
+
+        category = "Document issue";
+
+        confidence = 82;
+
+        actions = [
+            "Check that the correct document was uploaded.",
+            "Check readability.",
+            "Check file format and required information.",
+            "Re-upload through the official process if allowed."
+        ];
+
+    }
+
+
+    document.getElementById("recoveryResult")
+        .innerHTML = `
+
+            <div class="card" style="margin-top:20px">
+
+                <h3>AI Diagnosis</h3>
+
+                <br>
+
+                <strong>Likely category:</strong>
+
+                <p>${category}</p>
+
+                <br>
+
+                <strong>Prototype confidence:</strong>
+
+                <p>${confidence}%</p>
+
+                <br>
+
+                <h4>Recovery plan</h4>
+
+                <br>
+
+                ${actions.map(
+                    (a, i) =>
+                        `<div class="alert alert-good">
+                            ${i + 1}. ${a}
+                        </div>`
+                ).join("")}
+
+                <div class="alert alert-warning">
+
+                    AI classification is only an aid.
+                    Always follow the official authority's stated reason and
+                    correction procedure.
+
+                </div>
+
+            </div>
+
+        `;
+
+}
+
+
+/* SCAM SHIELD */
+
+function checkScam() {
+
+    const text =
+        document
+            .getElementById("scamText")
+            .value
+            .toLowerCase();
+
+
+    if (!text) {
+
+        alert("Paste the message first.");
+
+        return;
+
+    }
+
+
+    let score = 0;
+
+    let signals = [];
+
+
+    const suspiciousTerms = [
+
+        ["pay", "Requests payment to access scholarship."],
+
+        ["fee", "Mentions an application/unlock fee."],
+
+        ["upi", "Contains UPI payment language."],
+
+        ["otp", "Requests OTP information."],
+
+        ["password", "Requests password/credential."],
+
+        ["guaranteed", "Uses a guarantee claim."],
+
+        ["whatsapp", "Pushes communication to WhatsApp."],
+
+        ["urgent", "Creates urgency."],
+
+        ["click", "Encourages clicking a link."],
+
+        ["prize", "Uses prize/reward language."]
+
+    ];
+
+
+    suspiciousTerms.forEach(([term, reason]) => {
+
+        if (text.includes(term)) {
+
+            score += 10;
+
+            signals.push(reason);
+
+        }
+
+    });
+
+
+    score = Math.min(100, score);
+
+
+    const risk =
+        score >= 50
+            ? "HIGH"
+            : score >= 25
+                ? "MEDIUM"
+                : "LOW";
+
+
+    document.getElementById("scamResult")
+        .innerHTML = `
+
+            <div class="card" style="margin-top:20px">
+
+                <h3>Scam Risk: ${risk}</h3>
+
+                <br>
+
+                <div class="progress">
+
+                    <div style="width:${score}%"></div>
+
+                </div>
+
+                ${
+                    signals.length
+                        ? signals.map(
+                            x =>
+                                `<div class="alert alert-warning">
+                                    ⚠ ${x}
+                                </div>`
+                        ).join("")
+                        : `
+                            <div class="alert alert-good">
+                                No major prototype warning signal detected.
+                            </div>
+                          `
+                }
+
+                <div class="alert alert-danger">
+
+                    Never give an unknown person your OTP, password,
+                    banking PIN or sensitive authentication information.
+
+                    <br><br>
+
+                    Do not pay an unknown person merely because they promise
+                    scholarship approval.
+
+                </div>
+
+            </div>
+
+        `;
+
+}
+
+
+/* FINANCIAL STRESS */
+
+function calculateStress() {
+
+    const income =
+        Number(
+            document.getElementById("fsIncome").value
+        ) || 0;
+
+    const fees =
+        Number(
+            document.getElementById("fsFees").value
+        ) || 0;
+
+    const outstanding =
+        Number(
+            document.getElementById("fsOutstanding").value
+        ) || 0;
+
+    const support =
+        Number(
+            document.getElementById("fsSupport").value
+        ) || 0;
+
+
+    if (!income || !fees) {
+
+        alert(
+            "Enter family income and annual education cost."
+        );
+
+        return;
+
+    }
+
+
+    const uncovered =
+        Math.max(0, fees - support);
+
+
+    const ratio =
+        uncovered / income;
+
+
+    let level;
+
+
+    if (
+        outstanding > income * 0.30 ||
+        ratio > 0.50
+    ) {
+
+        level = "CRITICAL";
+
+    }
+
+    else if (
+        outstanding > income * 0.15 ||
+        ratio > 0.30
+    ) {
+
+        level = "HIGH";
+
+    }
+
+    else if (
+        ratio > 0.15
+    ) {
+
+        level = "MEDIUM";
+
+    }
+
+    else {
+
+        level = "LOW";
+
+    }
+
+
+    document.getElementById("stressMetric")
+        .textContent = level;
+
+
+    document.getElementById("stressResult")
+        .innerHTML = `
+
+            <div class="card" style="margin-top:20px">
+
+                <h3>
+                    Education Financial Stress: ${level}
+                </h3>
+
+                <br>
+
+                <p>
+
+                    Estimated uncovered annual education cost:
+
+                    <strong>
+                        ₹${uncovered.toLocaleString()}
+                    </strong>
+
+                </p>
+
+                <br>
+
+                ${
+                    level === "CRITICAL"
+                        ? `
+                            <div class="alert alert-danger">
+                                Immediate support discovery should be prioritized.
+                                Search verified scholarships, institutional assistance
+                                and other legitimate education-support options.
+                            </div>
+                          `
+                        : level === "HIGH"
+                            ? `
+                                <div class="alert alert-warning">
+                                    The student's uncovered education cost appears significant.
+                                    Prioritize potentially relevant support opportunities.
+                                </div>
+                              `
+                            : `
+                                <div class="alert alert-good">
+                                    Current prototype calculation indicates lower support pressure.
+                                    Continue checking available benefits.
+                                </div>
+                              `
+                }
+
+            </div>
+
+        `;
+
+}
+
+
+/* VOICE ASSISTANT */
+
+function startVoice() {
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+
+    if (!SpeechRecognition) {
+
+        document.getElementById("voiceStatus")
+            .textContent =
+            "Speech recognition is not supported in this browser. Try Chrome/Edge.";
+
+        return;
+
+    }
+
+
+    const recognition =
+        new SpeechRecognition();
+
+
+    recognition.lang = "hi-IN";
+
+    recognition.interimResults = false;
+
+    recognition.continuous = false;
+
+
+    document.getElementById("voiceStatus")
+        .textContent = "Listening...";
+
+
+    recognition.start();
+
+
+    recognition.onresult = function(event) {
+
+        const text =
+            event.results[0][0].transcript;
+
+
+        addChat("user", text);
+
+        processVoiceIntent(text);
+
+    };
+
+
+    recognition.onerror = function() {
+
+        document.getElementById("voiceStatus")
+            .textContent =
+            "Could not understand. Please try again.";
+
+    };
+
+
+    recognition.onend = function() {
+
+        document.getElementById("voiceStatus")
+            .textContent =
+            "Press the microphone and speak again.";
+
+    };
+
+}
+
+
+function processVoiceIntent(text) {
+
+    const t = text.toLowerCase();
+
+    let answer;
+
+
+    if (
+        t.includes("scholarship") ||
+        t.includes("paisa")
+    ) {
+
+        answer =
+            "Bilkul. Sabse pehle apna Scholarship Passport complete kijiye. Uske baad main potential benefits identify kar sakta hoon.";
+
+    }
+
+    else if (
+        t.includes("document") ||
+        t.includes("certificate")
+    ) {
+
+        answer =
+            "Aap Document Doctor mein document ki photo ya file upload kar sakte hain. Main bataunga ki basic information aur readability check mein koi problem dikh rahi hai ya nahi.";
+
+    }
+
+    else if (
+        t.includes("problem") ||
+        t.includes("reject")
+    ) {
+
+        answer =
+            "Aap rejection ya deficiency ka message Recovery Engine mein paste kijiye. Main possible problem category aur next steps bataunga.";
+
+    }
+
+    else {
+
+        answer =
+            "Main scholarship discovery, documents, application problems, deadlines aur education financial support ke baare mein help kar sakta hoon. Aap simple Hindi mein bataiye ki problem kya hai.";
+
+    }
+
+
+    addChat("ai", answer);
+
+    speakText(answer);
+
+}
+
+
+function addChat(type, text) {
+
+    const chat =
+        document.getElementById("chat");
+
+
+    const div =
+        document.createElement("div");
+
+
+    div.className =
+        "msg " + type;
+
+
+    div.textContent = text;
+
+
+    chat.appendChild(div);
+
+
+    chat.scrollTop =
+        chat.scrollHeight;
+
+}
+
+
+function speakText(text) {
+
+    if (!("speechSynthesis" in window))
+        return;
+
+
+    const speech =
+        new SpeechSynthesisUtterance(text);
+
+
+    speech.lang = "hi-IN";
+
+    speech.rate = 0.9;
+
+
+    window.speechSynthesis.speak(speech);
+
+}
+
+
+/* MODAL */
+
+function openModal(title, content) {
+
+    document.getElementById("modalTitle")
+        .textContent = title;
+
+
+    document.getElementById("modalContent")
+        .innerHTML = content;
+
+
+    document.getElementById("modal")
+        .classList.add("show");
+
+}
+
+
+function closeModal() {
+
+    document.getElementById("modal")
+        .classList.remove("show");
+
+}
+
+
+/* DASHBOARD DEFAULT VALUES */
+
+if (profile) {
+
+    updateHealth();
+
+}
+
+</script>
+
+</body>
+</html>
